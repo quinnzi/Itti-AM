@@ -1,0 +1,12 @@
+* {
+   box-sizing: border-box;
+}
+
+.planticon{
+   margin-bottom:8rem;
+}
+
+#garden{
+    grid-template-columns: none; width: 100%; grid-template-rows: none; grid-auto-flow: column;
+    padding-left: 2rem;
+}

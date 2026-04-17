@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AM' Plant Manager</title>
+<link rel="stylesheet" src="plantstyle.css">
+</head>
+
+<body>
+<div style="display: flex; width:100%">
+    <div style="background-color:rgb(233, 255, 219); height:100vh; width: 70%; border-right: black 3px solid;">
+        <h1 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center;">AManager</h1>
+            <div style="display: flex;flex-direction: column; margin: 1rem;">
+            <input type="number" placeholder="How many rows?" value="3" id="rows"> 
+            <input type="number" placeholder="How many plants each row?" value="5" id="plants"> 
+            <input type="number" placeholder="How many far apart are the plants in millimeters?" value="10"> 
+            <input type="time" placeholder="When to check the soil moisture of the plants?"> 
+            </div>
+    </div>
+    <div style="background-color: rgb(253, 253, 253); height:100vh; width: 100%; padding: 1rem;">
+        <h1 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;"></h1>
+<div id="garden" style="display: grid;">
+<img src="plant-icon-cf.png" height="69rem" id="plant" class="planticon">
+
+</div>
+</div>
+<script>
+    const plant = document.getElementById("plant")
+    plant.removeAttribute('id')
+    const iplants = document.getElementById("rows")
+    const plantrows = document.getElementById("plants")
+
+    
+    function update() {
+    let y = document.getElementById("plants").value // getting x and y within the function ensures their value always updates
+    let x = document.getElementById("rows").value
+    document.getElementById("garden").style.gridTemplateColumns = `repeat(${x}, 1fr)` // setting rows
+    document.getElementById("garden").style.gridTemplateRows = `repeat(${y}, 1fr)` // setting numbers of plants in each column
+
+    document.querySelectorAll(".planticon").forEach(pl => pl.remove())
+
+    // Duplication
+    let plant_number = x * y  
+    for(let i = 0; i < plant_number; i++){
+    const copycat = plant.cloneNode(true)
+    document.getElementById("garden").appendChild(copycat)}
+}
+
+    plantrows.addEventListener('change', update)
+    iplants.addEventListener('change', update)
+
+
+
+</script>
+
+</body>
+</html>
