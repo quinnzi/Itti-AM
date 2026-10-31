@@ -4,36 +4,58 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AM' Plant Manager</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Rammetto+One&display=swap" rel="stylesheet">
 <link rel="stylesheet" src="plantstyle.css">
 </head>
 
 <body>
 <div style="display: flex; width:100%">
-    <div style="background-color:rgb(233, 255, 219); height:100vh; width: 70%; border-right: black 3px solid;">
-        <h1 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center;">AManager</h1>
-            <div style="display: flex;flex-direction: column; margin: 1rem;">
-            <input type="number" placeholder="How many rows?" value="3" id="rows"> 
-            <input type="number" placeholder="How many plants each row?" value="5" id="plants"> 
-            <input type="number" placeholder="How many far apart are the plants in millimeters?" value="10"> 
-            <input type="time" placeholder="When to check the soil moisture of the plants?"> 
-            </div>
+    <div style="background-color:rgb(233, 255, 219); height:100vh; width: 70%; border-right: black 3px solid; margin: 0; padding: 0;">
+        <h1 style="font-family: Rammetto One; text-align: center; font-size: 4rem; background-color: rgb(67, 161, 67); width: 100%;" >Agribot Manager</h1>
+            <form style="display: flex;flex-direction: column; margin: 1rem;" id="form">
+            <input type="number" placeholder="How many rows?" value="3" name="rows" id="rows"> 
+            <input type="number" placeholder="How many plants each row?" value="5" name="columns"id="columns"> 
+            <input type="number" placeholder="How many far apart are the plants in millimeters?" value="10" name="distance" id="distance"> 
+            <input type="time" placeholder="When to check the soil moisture of the plants?" name="time"> 
+            <button type="submit" id="submit">Submit</button>
+            </form>
     </div>
     <div style="background-color: rgb(253, 253, 253); height:100vh; width: 100%; padding: 1rem;">
         <h1 style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;"></h1>
-<div id="garden" style="display: grid;">
-<img src="plant-icon-cf.png" height="69rem" id="plant" class="planticon">
-
-</div>
+<div id="garden" style="display: grid; align-self: center; width: 100%;">
+<img src="plant-icon-cf.png" height="69rem" id="plant" class="planticon" style="margin:1rem;">
 </div>
 <script>
-    const plant = document.getElementById("plant")
-    plant.removeAttribute('id')
-    const iplants = document.getElementById("rows")
-    const plantrows = document.getElementById("plants")
+    const submit = document.getElementById("submit")
+
+    submit.addEventListener('click', async function sendData(event) {
+ event.preventDefault()
+         const form = document.getElementById("form")
+         const Formulated = new FormData(form)
+
+try{
+const response = await fetch("http://192.168.4.70/data-bus", {
+  method: "POST", 
+  body: Formulated
+})
+if (!response.ok){
+console.log("Something went wrong:" + response.status)
+} 
+console.log("success")
+
+}
+
+catch(err){
+console.log(err)
+}
+})
+
 
     
     function update() {
-    let y = document.getElementById("plants").value // getting x and y within the function ensures their value always updates
+    let y = document.getElementById("columns").value // getting x and y within the function ensures their value always updates
     let x = document.getElementById("rows").value
     document.getElementById("garden").style.gridTemplateColumns = `repeat(${x}, 1fr)` // setting rows
     document.getElementById("garden").style.gridTemplateRows = `repeat(${y}, 1fr)` // setting numbers of plants in each column
@@ -47,8 +69,21 @@
     document.getElementById("garden").appendChild(copycat)}
 }
 
+    const plant = document.getElementById("plant")
+    plant.removeAttribute('id')
+    const iplants = document.getElementById("rows")
+    const plantrows = document.getElementById("columns")
     plantrows.addEventListener('change', update)
     iplants.addEventListener('change', update)
+
+    const space = document.getElementById("distance")
+    function spacing(){
+    document.querySelectorAll(".planticon").forEach(pl => {pl.outerHTML = `<img src="plant-icon-cf.png" height="69rem" id="plant" class="planticon" style="margin: 1rem; margin-bottom:${space.value * 0.5}rem;">`})
+    }
+    space.addEventListener('change', spacing)
+
+
+
 
 
 
